@@ -1,0 +1,18 @@
+{
+  "name": "portfolio-edit",
+  "private": true,
+  "scripts": {
+    "render": "remotion render src/index.ts Portfolio out/portfolio-final.mp4 --browser-executable=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
+  },
+  "dependencies": {
+    "@fontsource/anton": "^5.1.0",
+    "@fontsource/inter": "^5.1.0",
+    "@remotion/cli": "^4.0.534",
+    "@remotion/fonts": "^4.0.534",
+    "@remotion/google-fonts": "^4.0.534",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.534",
+    "typescript": "^5.6.3"
+  }
+}
