@@ -1,0 +1,19 @@
+{
+  "name": "inspiria-hero",
+  "version": "1.0.0",
+  "private": true,
+  "description": "15s kinetic-typography hero motion graphic for inspiria.edu.in",
+  "type": "module",
+  "scripts": {
+    "stills": "node render.mjs stills",
+    "render": "node render.mjs video",
+    "encode": "bash encode.sh",
+    "build": "node render.mjs video && bash encode.sh"
+  },
+  "dependencies": {
+    "pngjs": "^7.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
