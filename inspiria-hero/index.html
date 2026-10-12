@@ -102,7 +102,7 @@ canvas{position:absolute;left:0;top:0}
 .corner{position:absolute;width:26px;height:26px;border-color:currentColor;border-style:solid;opacity:.55}
 #hbar{position:absolute;left:250px;top:1032px;width:180px;height:2px;background:currentColor;opacity:.25}
 #hbarf{position:absolute;left:250px;top:1032px;width:180px;height:2px;background:var(--yellow);transform-origin:0 50%}
-#grain{mix-blend-mode:overlay;opacity:.14}
+#grain{mix-blend-mode:overlay;opacity:.11}
 </style>
 </head>
 <body>
@@ -264,7 +264,9 @@ function split(el) {
   return [...txt].map(c => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = c === ' ' ? ' ' : c; el.appendChild(s); return s; });
 }
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&/+';
+let TQ = 0; // time snapped to the 60fps output frame, for discrete text updates
 function scramble(text, p, seed, t) {
+  t = TQ;
   if (p <= 0) return '';
   const n = text.length, done = Math.floor(n * p), tick = Math.floor(t * 30);
   let out = '';
@@ -495,7 +497,7 @@ function bandSVG(col, curve = 380) {
   const h = 5200, w = 3000, x0 = 300, y0 = 0;
   return `<svg width="3600" height="5200" viewBox="0 0 3600 5200"><path d="M${x0} ${y0} L${x0 + w} ${y0} Q ${x0 + w + curve * 2} ${h / 2} ${x0 + w} ${h} L${x0} ${h} Q ${x0 + curve * 2} ${h / 2} ${x0} ${y0} Z" fill="${col}"/></svg>`;
 }
-$('band0').innerHTML = bandSVG('#051586'); $('band1').innerHTML = bandSVG('#252aec'); $('band2').innerHTML = bandSVG('#ffd306'); $('bandEnd').innerHTML = bandSVG('#01052e');
+$('band0').innerHTML = bandSVG('#f4f6ff'); $('band1').innerHTML = bandSVG('#252aec'); $('band2').innerHTML = bandSVG('#ffd306'); $('bandEnd').innerHTML = bandSVG('#01052e');
 
 /* ==================== SCENE RENDER ==================== */
 const show = (id, on) => { $(id).style.display = on ? 'block' : 'none'; };
@@ -522,7 +524,7 @@ function S1(t) {
   $('s1ticks').style.transform = `rotate(${t * 60}deg)`;
   tf($('s1core'), { s: E.outBack(prog(t, 0.75, 1.15), 2.2), r: 25 * Math.sin(t * 3) });
   $('s1orb').style.transform = `rotate(${t * 160}deg)`;
-  $('s1tag').textContent = scramble('( 01 )  KNOWLEDGE CAMPUS — SILIGURI, EAST INDIA', E.outCubic(prog(t, 0.9, 1.6)), 3, t);
+  $('s1tag').textContent = scramble('( 01 )  KNOWLEDGE CAMPUS — SILIGURI, EAST INDIA', E.outCubic(prog(TQ, 0.9, 1.6)), 3, t);
 }
 
 function S2(t) {
@@ -542,7 +544,7 @@ function S2(t) {
   const pp = E.outExpo(prog(t, 2.8, 3.25));
   tf($('s2panel'), { sx: lerp(0, 1, pp), sy: lerp(0.3, 1, pp), o: pp });
   tf($('s2paneltag'), { o: prog(t, 3.1, 3.3) });
-  $('s2paneltag').textContent = scramble('FIND THE PROGRAM THAT FITS YOUR AMBITION', E.outCubic(prog(t, 3.05, 3.6)), 9, t);
+  $('s2paneltag').textContent = scramble('FIND THE PROGRAM THAT FITS YOUR AMBITION', E.outCubic(prog(TQ, 3.05, 3.6)), 9, t);
   for (let i = 0; i < 4; i++) {
     const p = prog(t, 2.95 + i * 0.08, 2.95 + i * 0.08 + 0.5);
     tf($('sch' + i), { x: lerp(900, 0, E.outExpo(p)), skx: lerp(-30, 0, E.outBack(p, 2)), o: prog(t, 2.95 + i * .08, 3.05 + i * .08) });
@@ -563,11 +565,11 @@ function S3(t) {
   slides.forEach((s, i) => {
     const d = i * 1080 + cy;
     tf(s.ghost, { y: -0.55 * d, x: (s.side === 'L' ? 1 : -1) * (t - 5) * 40 });
-    const A = ARRIVE[i], cp = E.outExpo(prog(t, A - 0.05, A + 0.75));
+    const A = ARRIVE[i], cp = E.outExpo(prog(TQ, A - 0.05, A + 0.75));
     s.v.textContent = Math.round(s.n * cp);
     const sideK = s.side === 'L' ? -1 : 1;
     tf(s.num, { x: sideK * 260 * (1 - E.outExpo(prog(t, A - 0.15, A + 0.35))), skx: -sideK * 18 * (1 - E.outBack(prog(t, A - .15, A + .45), 2)) });
-    s.lab.textContent = scramble(s.label, E.outCubic(prog(t, A, A + 0.4)), i * 13, t);
+    s.lab.textContent = scramble(s.label, E.outCubic(prog(TQ, A, A + 0.4)), i * 13, t);
     tf(s.rule, { sx: E.outExpo(prog(t, A + 0.1, A + 0.6)) });
     tf(s.idx, { o: prog(t, A, A + 0.15) });
   });
@@ -589,7 +591,7 @@ function S4a(t) {
   $('s4strip').style.transform = `rotate(-2deg) scaleY(${sp.toFixed(3)})`;
   tf($('s4striptxt'), { x: -((t - 9.0) * 1500 + 900 * E.outExpo(prog(t, 9.05, 9.6))) % 2200 });
   $('s4ringg').style.transform = `rotate(${t * 90}deg) scale(${E.outBack(prog(t, 9.25, 9.7), 1.8).toFixed(3)})`;
-  $('s4tag').textContent = scramble('( 04 ) — THE INSPIRIA EDGE', prog(t, 9.4, 9.9), 21, t);
+  $('s4tag').textContent = scramble('( 04 ) — THE INSPIRIA EDGE', prog(TQ, 9.4, 9.9), 21, t);
 }
 
 function S4b(t) {
@@ -603,7 +605,7 @@ function S4b(t) {
     tf(c, { y: lerp(470, 0, E.outExpo(p)), s: lerp(1.6, 1, E.outBack(p, 1.6)), r: lerp(i % 2 ? 12 : -12, 0, E.outExpo(p)) }); });
   s4qualCh.forEach((c, i) => { const p = prog(t, 10.7 + i * 0.022, 11.1 + i * 0.022); tf(c, { y: lerp(130, 0, E.outExpo(p)) }); });
   tf($('s4btag'), { o: prog(t, 10.8, 10.95) });
-  $('s4btag').textContent = scramble('+ GLOBAL CERTIFICATION COACHING, ALONGSIDE YOUR DEGREE', prog(t, 10.8, 11.3), 33, t);
+  $('s4btag').textContent = scramble('+ GLOBAL CERTIFICATION COACHING, ALONGSIDE YOUR DEGREE', prog(TQ, 10.8, 11.3), 33, t);
   for (let i = 0; i < 4; i++) {
     const p = prog(t, 10.85 + i * 0.07, 11.3 + i * 0.07), a = hash(i, 50) * 6.283;
     tf($('chip' + i), { x: Math.cos(a) * 900 * (1 - E.outExpo(p)), y: (Math.sin(a) * 500 + 300) * (1 - E.outExpo(p)), r: lerp(hash(i, 51) * 80 - 40, 0, E.outBack(p, 1.8)), s: lerp(.4, 1, E.outBack(p, 1.6)), o: prog(t, 10.85 + i * .07, 10.95 + i * .07) });
@@ -614,7 +616,7 @@ function S5(t) {
   const enter = 1 - E.outExpo(prog(t, 11.74, 12.3));
   tf($('s5cam'), { s: 1 + 0.06 * enter + 0.03 * E.inOutCubic(prog(t, 12.3, 14.6)), r: -1.2 * enter });
   setAb($('s5cam'), t);
-  $('s5tag').textContent = scramble('( 05 )  INSPIRIA KNOWLEDGE CAMPUS', prog(t, 11.9, 12.5), 44, t);
+  $('s5tag').textContent = scramble('( 05 )  INSPIRIA KNOWLEDGE CAMPUS', prog(TQ, 11.9, 12.5), 44, t);
   s5getCh.forEach((c, i) => { const p = prog(t, 11.8 + i * 0.05, 12.3 + i * 0.05); tf(c, { y: lerp(230, 0, E.outExpo(p)), r: lerp(16, 0, E.outExpo(p)) }); });
   s5lrCh.forEach((c, i) => { const p = prog(t, 11.92 + i * 0.035, 12.42 + i * 0.035); tf(c, { y: lerp(230, 0, E.outExpo(p)), r: lerp(16, 0, E.outExpo(p)) }); });
   tf($('s5under'), { sx: E.outExpo(prog(t, 12.45, 12.95)) });
@@ -680,6 +682,7 @@ function HUD(t) {
 /* ---------------- master ---------------- */
 function render(t) {
   t = ((t % DUR) + DUR) % DUR;
+  TQ = Math.round(t * 60) / 60;
   drawBG(t); drawFX(t);
   const on = { s1: t < 2.66, s2: t > 2.45 && t < 5.2, s3: t >= 5.2 && t < 9.05, s4a: t >= 9.05 && t < 10.45, s4b: t >= 10.45 && t < 11.74, s5: t >= 11.74 };
   for (const k in on) show(k, on[k]);
