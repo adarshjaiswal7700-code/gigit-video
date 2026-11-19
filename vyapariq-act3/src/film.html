@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VyaparIQ for RSPSDC — Act 3</title>
+<link rel="stylesheet" href="film.css">
+</head>
+<body>
+<div id="stage">
+  <div class="bg-grid"></div>
+  <div class="bg-glow g1"></div>
+  <div class="bg-glow g2"></div>
+  <div class="vignette"></div>
+
+  <div class="bug bug-l">SARASNOVA</div>
+  <div class="bug bug-r">VyaparIQ <span>for</span> RSPSDC</div>
+
+  <!-- ───────── Intro: hub ───────── -->
+  <div id="hubGroup">
+    <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+    <div id="hub">
+      <svg viewBox="0 0 100 100" width="96" height="96">
+        <g stroke="#fff" stroke-width="3.2" stroke-linecap="round" opacity=".95">
+          <line x1="50" y1="50" x2="50" y2="15"/><line x1="50" y1="50" x2="83" y2="39"/>
+          <line x1="50" y1="50" x2="71" y2="78"/><line x1="50" y1="50" x2="29" y2="78"/>
+          <line x1="50" y1="50" x2="17" y2="39"/>
+        </g>
+        <g fill="#fff">
+          <circle cx="50" cy="15" r="6"/><circle cx="83" cy="39" r="6"/><circle cx="71" cy="78" r="6"/>
+          <circle cx="29" cy="78" r="6"/><circle cx="17" cy="39" r="6"/>
+        </g>
+        <circle cx="50" cy="50" r="13" fill="#fff"/>
+        <circle cx="50" cy="50" r="6" fill="#6D4DFF"/>
+      </svg>
+    </div>
+    <div id="wordmark">Vyapar<b>IQ</b></div>
+    <div id="forChip"><i></i>Architecture for RSPSDC</div>
+  </div>
+
+  <svg id="spokes" width="1920" height="1080" viewBox="0 0 1920 1080"></svg>
+
+  <h1 id="headC"></h1>
+  <h1 id="headL"><span>WHAT RSPSDC GETS</span><span>WITH <em>VYAPARIQ</em></span></h1>
+
+  <!-- capability cards (built in JS) -->
+  <div id="cards"></div>
+  <div id="feeds"></div>
+
+  <!-- ───────── Dashboard ───────── -->
+  <div id="dash">
+    <div class="titlebar">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="dtitle">RSPSDC Unified Dashboard</div>
+      <div class="dright">
+        <span class="pill ghost">Illustrative data</span>
+        <span class="powered"><span class="mini-hub"></span><span>Powered by Vyapar<b>IQ</b></span></span>
+      </div>
+    </div>
+    <div class="rail" id="rail"></div>
+    <div class="view">
+
+      <!-- 1 · Live Tally Sync -->
+      <section class="mod" id="m1" style="--ac:var(--c1)">
+        <header class="mhead"><div class="micon" data-ic="0"></div><h2>Live Tally Sync</h2>
+          <span class="pill live" id="m1live"><i class="blink"></i>LIVE · synced just now</span></header>
+        <div class="mbody">
+          <div class="panel" style="left:0;top:0;width:404px;height:650px">
+            <div class="ptitle">Tally · Day Book</div>
+            <div class="ledger" id="ledger"></div>
+          </div>
+          <div id="beam" style="left:404px;top:0;width:76px;height:650px">
+            <div class="track t1"><i></i><i></i><i></i></div>
+            <div class="track t2"><i></i><i></i><i></i></div>
+            <div class="track t3"><i></i><i></i><i></i></div>
+            <div class="syncdot"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 0 0-14.3-4.9"/><path d="M5 3v4.5h4.5"/><path d="M4 12a8 8 0 0 0 14.3 4.9"/><path d="M19 21v-4.5h-4.5"/></svg></div>
+          </div>
+          <div class="panel" style="left:480px;top:0;width:542px;height:650px">
+            <div class="ptitle">Executive View <span class="ptag">real-time</span></div>
+            <div class="kpis">
+              <div class="kpi"><label>Cash &amp; Bank</label><b class="num" id="k1">₹ 0.00 Cr</b><small class="up">▲ updated now</small></div>
+              <div class="kpi"><label>CSR Grants Received</label><b class="num" id="k2">₹ 0.00 Cr</b><small>FY to date</small></div>
+              <div class="kpi"><label>Grant Utilised</label><b class="num" id="k3">0%</b><small>of sanctioned</small></div>
+            </div>
+            <div class="chartbox" id="m1chart">
+              <div class="ctitle">CSR grant stream <span>₹ lakh · weekly</span></div>
+              <svg viewBox="0 0 490 300" width="490" height="300">
+                <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22D3EE" stop-opacity=".38"/><stop offset="1" stop-color="#22D3EE" stop-opacity="0"/></linearGradient>
+                <clipPath id="aclip"><rect id="acliprect" x="0" y="0" width="0" height="300"/></clipPath></defs>
+                <g stroke="rgba(255,255,255,.07)" stroke-width="1"><line x1="0" y1="60" x2="490" y2="60"/><line x1="0" y1="130" x2="490" y2="130"/><line x1="0" y1="200" x2="490" y2="200"/><line x1="0" y1="270" x2="490" y2="270"/></g>
+                <g clip-path="url(#aclip)">
+                  <path d="M0 230 C40 222 60 205 95 198 S150 210 185 172 S245 150 280 128 S335 140 370 96 S435 78 482 46 L482 270 L0 270 Z" fill="url(#ag)"/>
+                  <path d="M0 230 C40 222 60 205 95 198 S150 210 185 172 S245 150 280 128 S335 140 370 96 S435 78 482 46" fill="none" stroke="#22D3EE" stroke-width="3.5" stroke-linecap="round"/>
+                </g>
+                <circle id="livedot" cx="482" cy="46" r="7" fill="#22D3EE"/>
+                <circle id="livehalo" cx="482" cy="46" r="7" fill="none" stroke="#22D3EE" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 · WhatsApp Reminders -->
+      <section class="mod" id="m2" style="--ac:var(--c2)">
+        <header class="mhead"><div class="micon" data-ic="1"></div><h2>WhatsApp Reminders</h2>
+          <span class="pill tint" id="m2rule"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>Automated · repeats until closed</span></header>
+        <div class="mbody">
+          <div class="panel" style="left:0;top:0;width:500px;height:650px">
+            <div class="ptitle">Pending follow-ups</div>
+            <div class="fu" id="fu1"><div class="fuic">₹</div><div class="futx"><b>Partner receivable</b><span>₹ 4,20,000 · 12 days overdue</span></div>
+              <div class="chips"><span class="chip wait">Pending</span><span class="chip sent">✓ Reminder sent</span><span class="chip ok">Replied</span></div></div>
+            <div class="fu" id="fu2"><div class="fuic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><div class="futx"><b>Utilization report</b><span>Q2 report · not submitted</span></div>
+              <div class="chips"><span class="chip wait">Pending</span><span class="chip sent">✓ Reminder sent</span></div></div>
+            <div class="fu" id="fu3"><div class="fuic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div><div class="futx"><b>Documentation</b><span>MoU annexures · awaited</span></div>
+              <div class="chips"><span class="chip wait">Pending</span><span class="chip sent">✓ Reminder sent</span></div></div>
+            <div class="zero" id="zero"><b class="num">0</b><div><strong>manual follow-ups</strong><span>No calls. No chasing.</span></div></div>
+          </div>
+          <div class="panel chat" style="left:522px;top:0;width:500px;height:650px">
+            <div class="chead" id="chead"><div class="av">TP</div><div><b>Training Partner</b><span>WhatsApp Business · automated</span></div></div>
+            <div class="cday">TODAY</div>
+            <div class="bub out" id="b1">Reminder: Invoice INV-0412 for <b>₹ 4,20,000</b> is overdue by 12 days. Kindly arrange payment.<em>10:02 <u>✓✓</u></em></div>
+            <div class="bub out" id="b2">Your Q2 utilization report is pending. Please share it by Friday.<em>10:02 <u>✓✓</u></em></div>
+            <div class="bub out" id="b3">MoU annexure documents are awaited. Secure upload link attached.<em>10:03 <u>✓✓</u></em></div>
+            <div class="bub in" id="b4">Noted. Payment will be released tomorrow.<em>10:11</em></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 · Daily Pulse & Compliance -->
+      <section class="mod" id="m3" style="--ac:var(--c3)">
+        <header class="mhead"><div class="micon" data-ic="2"></div><h2>Daily Pulse &amp; Compliance</h2>
+          <span class="pill tint" id="m3del">✓ Delivered today</span></header>
+        <div class="mbody">
+          <div class="panel clockrow" id="clockrow" style="left:0;top:0;width:1022px;height:128px">
+            <div class="sun"><svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg></div>
+            <div class="clock num">8:30<span>AM</span></div>
+            <div class="clocktx"><b>Your morning brief</b><span>Cash · grants · projects · statutory &amp; audit deadlines</span></div>
+            <div class="every">EVERY MORNING</div>
+          </div>
+          <div class="panel pcard" id="p1" style="left:0;top:150px;width:326px;height:500px">
+            <div class="ptitle">Cash position</div>
+            <b class="big num" id="cashbig">₹ 0.00 Cr</b>
+            <small class="up">▲ ₹ 12.4 L vs yesterday</small>
+            <svg class="spark" viewBox="0 0 280 90" width="280" height="90"><path id="sparkp" d="M2 70 L40 62 L78 66 L116 48 L154 52 L192 34 L230 38 L276 14" fill="none" stroke="#FBBF24" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" stroke-dasharray="100"/></svg>
+            <div class="kv"><span>Bank balance</span><b class="num">₹ 2.96 Cr</b></div>
+            <div class="kv"><span>Grants receivable</span><b class="num">₹ 46.0 L</b></div>
+            <div class="kv"><span>Payables this week</span><b class="num">₹ 18.5 L</b></div>
+          </div>
+          <div class="panel pcard" id="p2" style="left:348px;top:150px;width:326px;height:500px">
+            <div class="ptitle">Project milestones</div>
+            <div class="ms"><div><span>Batch enrolment</span><b class="num">86%</b></div><i><u style="--w:86%"></u></i></div>
+            <div class="ms"><div><span>Assessment cycle</span><b class="num">64%</b></div><i><u style="--w:64%"></u></i></div>
+            <div class="ms"><div><span>Placement drive</span><b class="num">41%</b></div><i><u style="--w:41%"></u></i></div>
+            <div class="ms"><div><span>Centre audits</span><b class="num">72%</b></div><i><u style="--w:72%"></u></i></div>
+          </div>
+          <div class="panel pcard" id="p3" style="left:696px;top:150px;width:326px;height:500px">
+            <div class="ptitle">Statutory &amp; audit deadlines</div>
+            <div class="dl"><div><b>TDS return (26Q)</b><span>Statutory</span></div><em class="red">3 days</em></div>
+            <div class="dl"><div><b>GST filing</b><span>Statutory</span></div><em class="amb">7 days</em></div>
+            <div class="dl"><div><b>UC submission</b><span>Grant compliance</span></div><em class="amb">12 days</em></div>
+            <div class="dl"><div><b>Audit fieldwork</b><span>Statutory audit</span></div><em class="grn">18 days</em></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 · AI Chatbot -->
+      <section class="mod" id="m4" style="--ac:var(--c4)">
+        <header class="mhead"><div class="micon" data-ic="3"></div><h2>AI Chatbot</h2>
+          <span class="pill tint">Ask in plain language</span></header>
+        <div class="mbody">
+          <div class="prompt" id="prompt">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" opacity=".7"/></svg>
+            <div class="ptext"><span id="typed"></span><i id="caret"></i><span id="ph">Ask anything about finance or projects…</span></div>
+            <div class="send" id="send"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+          </div>
+          <div class="sugg" id="sugg"><span>Cash position today</span><span>Pending receivables</span><span>Grant-wise utilization</span><span>Open audit observations</span></div>
+          <div class="think" id="think"><i></i><i></i><i></i><span>Reading live Tally data…</span></div>
+          <div class="panel answer" id="answer" style="left:0;top:104px;width:1022px;height:546px">
+            <div class="acol">
+              <div class="ctitle">Q3 CSR utilization by grant <span>% utilised</span></div>
+              <div class="bars" id="bars">
+                <div class="bar"><b class="num">82%</b><i style="--h:82"></i><span>Grant A</span></div>
+                <div class="bar"><b class="num">74%</b><i style="--h:74"></i><span>Grant B</span></div>
+                <div class="bar"><b class="num">61%</b><i style="--h:61"></i><span>Grant C</span></div>
+                <div class="bar"><b class="num">91%</b><i style="--h:91"></i><span>Grant D</span></div>
+                <div class="bar"><b class="num">77%</b><i style="--h:77"></i><span>Grant E</span></div>
+              </div>
+            </div>
+            <div class="arow">
+              <div class="ans1"><b class="num" id="ansbig">0%</b><span>overall Q3 CSR<br>utilization</span></div>
+              <div class="ans2"><label>Pending compliance · 2</label>
+                <p><i class="red"></i>TDS return (26Q) — 3 days</p>
+                <p><i class="amb"></i>Utilisation certificate — 12 days</p></div>
+              <div class="badges"><span class="badge ok" id="bver">✓ Verified against live Tally data</span><span class="badge" id="bsec">Answered in 1.8 s</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 · Task Management -->
+      <section class="mod" id="m5" style="--ac:var(--c5)">
+        <header class="mhead"><div class="micon" data-ic="4"></div><h2>Task Management</h2>
+          <span class="pill tint">Assigned · tracked · closed</span></header>
+        <div class="mbody">
+          <div class="panel" style="left:0;top:0;width:700px;height:650px">
+            <div class="thead"><span>Task</span><span>Assigned to</span><span>Status</span></div>
+            <div class="task" id="t1"><div class="ttx"><em class="tg aud">Audit observation</em><b>Reconcile advance register</b><span>Observation #07 · due 28 Nov</span></div>
+              <div class="asg"><span class="un">Unassigned</span><span class="who"><i>ZA</i>Centre Head · Zone A</span></div>
+              <div class="chips"><span class="chip wait">Open</span><span class="chip prog">In progress</span><span class="chip ok">✓ Closed</span></div><u></u></div>
+            <div class="task" id="t2"><div class="ttx"><em class="tg aud">Audit observation</em><b>Asset tagging at all centres</b><span>Observation #11 · due 02 Dec</span></div>
+              <div class="asg"><span class="un">Unassigned</span><span class="who"><i>ZB</i>Centre Head · Zone B</span></div>
+              <div class="chips"><span class="chip wait">Open</span><span class="chip prog">In progress</span><span class="chip ok">✓ Closed</span></div><u></u></div>
+            <div class="task" id="t3"><div class="ttx"><em class="tg ops">Operational priority</em><b>Submit Q3 utilisation certificate</b><span>Grant compliance · due 01 Dec</span></div>
+              <div class="asg"><span class="un">Unassigned</span><span class="who"><i>FL</i>Finance Lead</span></div>
+              <div class="chips"><span class="chip wait">Open</span><span class="chip prog">In progress</span><span class="chip ok">✓ Closed</span></div><u></u></div>
+          </div>
+          <div class="panel ringp" style="left:722px;top:0;width:300px;height:650px">
+            <div class="ptitle">Closure tracking</div>
+            <div class="ringw">
+              <svg viewBox="0 0 200 200" width="220" height="220"><circle cx="100" cy="100" r="82" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="16"/>
+                <circle id="ringc" cx="100" cy="100" r="82" fill="none" stroke="#FB7185" stroke-width="16" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 100 100)"/></svg>
+              <div class="ringtx"><b class="num" id="ringn">0/3</b><span>closed</span></div>
+            </div>
+            <div class="kv"><span>Open</span><b class="num" id="cOpen">3</b></div>
+            <div class="kv"><span>In progress</span><b class="num" id="cProg">0</b></div>
+            <div class="kv"><span>Closed</span><b class="num" id="cDone">0</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Overview -->
+      <section class="mod" id="m6">
+        <header class="mhead"><div class="micon brand"><span class="mini-hub big"></span></div><h2>Unified overview</h2>
+          <span class="pill live"><i class="blink"></i>All 5 modules live</span></header>
+        <div class="mbody" id="ov"></div>
+      </section>
+    </div>
+  </div>
+</div>
+<script src="film.js"></script>
+</body>
+</html>
