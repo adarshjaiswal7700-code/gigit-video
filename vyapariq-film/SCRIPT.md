@@ -1,6 +1,8 @@
-# Mishra ji aur VyaparIQ — film script (v2)
+# Mishra ji aur VyaparIQ — film script (v3)
 
-1920×1080 · 30 fps · ~92 sec · white background · Hindi/Hinglish VO
+1920×1080 · 30 fps · ~84 sec · white background · Hindi/Hinglish VO
+
+**v3:** The narrator is now Bunty (Loud & Expressive), and Party 1 is now Pradeep. Gaps between lines are tighter, the voice is louder and the music is about 6 dB lower with stronger ducking. The animation is re-timed through `src/warp.json`, which maps the old timeline onto the new VO. Times in the table below are from v2; v3 runs about 8% shorter.
 
 | # | Time | Scene | Voiceover |
 |---|------|-------|-----------|
