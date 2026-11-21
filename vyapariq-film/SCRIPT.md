@@ -1,6 +1,8 @@
-# Mishra ji aur VyaparIQ — film script (v4)
+# Mishra ji aur VyaparIQ — film script (v5)
 
-1920×1080 · 30 fps · ~88 sec · white background · Hindi/Hinglish VO
+1920×1080 · 30 fps · ~80.5 sec · white background · Hindi/Hinglish VO
+
+**v5:** The narrator is Bunty – Friendly & Fun (voice ID `7qBNUtXRGP0jPi0H4r8k`), on `eleven_v3` with the same emotion tags. Mishra ji (Sanjay) and the party voices are unchanged from v4. `src/warp.json` is the v5 warp.
 
 **v4:** All voices were regenerated with ElevenLabs `eleven_v3` and emotion tags ([warmly], [sad], [excited]…), see `src/lines4.json`. The narrator is Danish Khan (Calm, Clear & Expressive) and Mishra ji is Sanjay (Mature Hindi Storyteller). Pauses inside a line are capped at about 0.12 s and gaps between lines are 0.05–0.25 s. `src/warp.json` is the v4 warp.
 
