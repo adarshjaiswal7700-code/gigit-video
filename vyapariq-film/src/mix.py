@@ -1,6 +1,6 @@
 import json,subprocess
 import numpy as np
-m=json.load(open('timeline.json')); mo=json.load(open('timeline_old.json')); wp=json.load(open('warp.json'))
+m=json.load(open('timeline4.json')); mo=json.load(open('timeline_old.json')); wp=json.load(open('warp4.json'))
 fwd=lambda t: float(np.interp(t,wp['old'],wp['new']))
 W=lambda k,i: mo[k]['start']+mo[k]['words'][i][1]   # old-time, mapped via fwd below
 Wn=lambda k,i: m[k]['start']+m[k]['words'][i][1]
@@ -35,6 +35,6 @@ filters.append('[vo]asplit=2[vo1][vosc]')
 filters.append('[mus][vosc]sidechaincompress=threshold=0.02:ratio=8:attack=30:release=350:makeup=1[mduck]')
 filters.append(''.join(sfx_labels)+f'amix=inputs={len(sfx_labels)}:normalize=0[sfx]')
 filters.append(f'[vo1][mduck][sfx]amix=inputs=3:normalize=0,atrim=0:{END},alimiter=limit=0.95,loudnorm=I=-14:TP=-1.5:LRA=11[out]')
-cmd=['ffmpeg','-y','-v','error']+inputs+['-filter_complex',';'.join(filters),'-map','[out]','-ar','48000','-c:a','pcm_s16le','mix.wav']
+cmd=['ffmpeg','-y','-v','error']+inputs+['-filter_complex',';'.join(filters),'-map','[out]','-ar','48000','-c:a','pcm_s16le','mix4.wav']
 subprocess.run(cmd,check=True)
-print(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0','mix.wav'],capture_output=True,text=True).stdout)
+print(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0','mix4.wav'],capture_output=True,text=True).stdout)
