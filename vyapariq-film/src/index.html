@@ -1,0 +1,288 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=block" rel="stylesheet">
+<style>
+:root{--p:#7C4DFF;--p2:#A855F7;--g:#16A34A;--r:#E5484D;--o:#F59E0B;--ink:#0F172A;--mut:#64748B}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#fff}
+body{font-family:'Plus Jakarta Sans',Inter,sans-serif;color:var(--ink)}
+#stage{position:absolute;inset:0;overflow:hidden;background:#fff}
+.abs{position:absolute}
+/* background */
+#grid{position:absolute;inset:-40px;background-image:radial-gradient(rgba(124,77,255,.13) 1.6px,transparent 1.7px);background-size:38px 38px;opacity:.55}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.0}
+.bgset{position:absolute;inset:0;opacity:0}
+.bgrow{position:absolute;left:0;white-space:nowrap;font-family:Inter;font-weight:900;letter-spacing:-.04em;line-height:1}
+.fill{color:rgba(124,77,255,.07)}
+.stroke{color:transparent;-webkit-text-stroke:2.5px rgba(124,77,255,.16)}
+.red.fill{color:rgba(229,72,77,.08)} .red.stroke{-webkit-text-stroke-color:rgba(229,72,77,.2)}
+.gold.fill{color:rgba(245,158,11,.11)} .gold.stroke{-webkit-text-stroke-color:rgba(245,158,11,.28)}
+.green.fill{color:rgba(22,163,74,.08)} .green.stroke{-webkit-text-stroke-color:rgba(22,163,74,.2)}
+.gray.fill{color:rgba(15,23,42,.05)} .gray.stroke{-webkit-text-stroke-color:rgba(15,23,42,.12)}
+/* character */
+#charWrap{position:absolute;left:0;top:0;width:1346px;height:1448px;transform-origin:0 0}
+#charBreath{position:absolute;inset:0;transform-origin:40% 100%}
+#charBreath img{position:absolute;left:0;top:0;width:1346px;height:1448px}
+#glow{position:absolute;width:1400px;height:1400px;border-radius:50%;background:radial-gradient(circle,rgba(255,196,77,.55),rgba(255,196,77,0) 62%);opacity:0}
+/* generic */
+.card{position:absolute;background:#fff;border-radius:28px;box-shadow:0 30px 80px rgba(40,20,110,.16),0 4px 14px rgba(40,20,110,.06);border:1px solid rgba(124,77,255,.10);overflow:hidden}
+.shot{position:absolute;border-radius:26px;box-shadow:0 40px 100px rgba(40,20,110,.20),0 6px 18px rgba(40,20,110,.08);overflow:hidden;background:#fff;border:1px solid rgba(15,23,42,.06)}
+.shot img{display:block;width:100%;height:auto}
+.chip{position:absolute;display:inline-flex;align-items:center;gap:12px;padding:14px 26px;border-radius:999px;background:#fff;font-weight:800;font-size:30px;box-shadow:0 14px 40px rgba(40,20,110,.14);border:1px solid rgba(124,77,255,.12);white-space:nowrap}
+.kicker{display:inline-flex;align-items:center;gap:10px;padding:10px 22px;border-radius:999px;background:rgba(124,77,255,.10);color:var(--p);font-weight:800;font-size:20px;letter-spacing:.14em;text-transform:uppercase}
+.h1{font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.pur{color:var(--p)} .grn{color:var(--g)} .rd{color:var(--r)}
+.ok{width:40px;height:40px;border-radius:50%;background:var(--g);display:inline-flex;align-items:center;justify-content:center}
+.ok svg{width:24px;height:24px}
+.hl{position:absolute;border:5px solid var(--p);border-radius:18px;box-shadow:0 0 0 9999px rgba(15,10,40,0),0 0 40px rgba(124,77,255,.55);opacity:0}
+/* caption */
+#cap{position:absolute;left:0;right:0;bottom:38px;display:flex;justify-content:center;pointer-events:none}
+#capBox{background:rgba(15,13,35,.88);color:#fff;font-family:Inter;font-weight:700;font-size:38px;padding:14px 34px;border-radius:18px;letter-spacing:-.01em;box-shadow:0 12px 40px rgba(0,0,0,.18);opacity:0;max-width:1600px;text-align:center}
+#capBox b{color:#C4B5FD;font-weight:800}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(20,16,50,.35) 100%);opacity:0;pointer-events:none}
+#cool{position:absolute;inset:0;background:rgba(70,90,140,.10);opacity:0;mix-blend-mode:multiply}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+#wipe{position:absolute;width:300px;height:300px;border-radius:50%;background:linear-gradient(135deg,#7C4DFF,#A855F7);left:0;top:0;transform:scale(0);opacity:1}
+canvas#conf{position:absolute;inset:0}
+/* bubbles */
+.bub{position:absolute;background:#fff;border-radius:26px 26px 26px 6px;padding:22px 28px;box-shadow:0 24px 60px rgba(40,20,110,.16);border:1px solid rgba(15,23,42,.07);max-width:640px}
+.bub .who{display:flex;align-items:center;gap:14px;font-weight:800;font-size:22px;color:var(--mut);margin-bottom:10px}
+.av{width:44px;height:44px;border-radius:50%;color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center}
+.bub .txt{font-size:34px;font-weight:700;line-height:1.25}
+.think{position:absolute;background:#fff;border-radius:60px;padding:46px 56px;box-shadow:0 30px 80px rgba(40,20,110,.18);border:2px solid rgba(124,77,255,.15)}
+.dot{position:absolute;border-radius:50%;background:#fff;box-shadow:0 10px 30px rgba(40,20,110,.15);border:2px solid rgba(124,77,255,.15)}
+.stamp{position:absolute;font-family:Inter;font-weight:900;color:var(--r);border:8px solid var(--r);border-radius:18px;padding:6px 28px;letter-spacing:.02em;background:rgba(255,255,255,.9)}
+/* phone */
+.phone{position:absolute;width:250px;height:500px;border-radius:44px;background:#111827;padding:12px;box-shadow:0 30px 70px rgba(0,0,0,.3)}
+.phone .scr{width:100%;height:100%;border-radius:34px;background:linear-gradient(160deg,#1f2937,#111827);color:#fff;display:flex;flex-direction:column;align-items:center;padding-top:70px}
+/* browser */
+.browser{position:absolute;border-radius:22px;background:#fff;box-shadow:0 50px 120px rgba(40,20,110,.25),0 6px 20px rgba(0,0,0,.08);overflow:hidden;border:1px solid rgba(15,23,42,.1)}
+.browser .bar{height:46px;background:#F1F2F6;display:flex;align-items:center;gap:9px;padding:0 18px;border-bottom:1px solid #e5e7eb}
+.browser .bar i{width:14px;height:14px;border-radius:50%;display:block}
+.browser .url{margin-left:18px;background:#fff;border-radius:10px;padding:5px 18px;font:600 16px Inter;color:#475569;width:420px}
+.row{display:flex;align-items:center;justify-content:space-between;padding:18px 30px;border-top:1px solid #f1f5f9;font-size:27px;font-weight:700}
+.tag{font-size:19px;font-weight:800;padding:6px 14px;border-radius:999px}
+.bar2{height:12px;border-radius:99px;background:#eef0f6;overflow:hidden;margin-top:14px}
+.bar2 i{display:block;height:100%;border-radius:99px}
+</style></head>
+<body><div id="stage">
+  <div id="grid"></div>
+  <div class="blob" id="blob1" style="width:900px;height:900px;left:-200px;top:-300px;background:#C4B5FD"></div>
+  <div class="blob" id="blob2" style="width:900px;height:900px;right:-250px;bottom:-350px;background:#BBF7D0"></div>
+  <div class="blob" id="blob3" style="width:1000px;height:800px;left:500px;top:100px;background:#FECACA"></div>
+  <div class="blob" id="blob4" style="width:1000px;height:800px;left:400px;top:150px;background:#FDE68A"></div>
+
+  <!-- BG text sets -->
+  <div class="bgset" id="bgA"><div class="bgrow fill" data-sp="-40" style="top:40px;font-size:230px">MISHRA TEXTILES · MISHRA TEXTILES · MISHRA TEXTILES ·</div><div class="bgrow stroke" data-sp="35" style="top:760px;font-size:200px">KANPUR · SINCE 1994 · KANPUR · SINCE 1994 · KANPUR ·</div></div>
+  <div class="bgset" id="bgB"><div class="bgrow red fill" data-sp="-60" style="top:30px;font-size:250px">UDHAAR · UDHAAR · UDHAAR · UDHAAR · UDHAAR ·</div><div class="bgrow red stroke" data-sp="50" style="top:780px;font-size:210px">₹22,00,000 · ₹22,00,000 · ₹22,00,000 ·</div></div>
+  <div class="bgset" id="bgC"><div class="bgrow red stroke" data-sp="-70" style="top:20px;font-size:190px">KAL PAKKA? · AGLE MAHINE · CHEQUE NIKAL GAYA · KAL PAKKA? ·</div><div class="bgrow gray fill" data-sp="55" style="top:420px;font-size:170px">BAHAANE · BAHAANE · BAHAANE · BAHAANE · BAHAANE ·</div><div class="bgrow red fill" data-sp="-45" style="top:800px;font-size:190px">THODA TIGHT HAI · AAP TOH GHAR KE HO · THODA TIGHT HAI ·</div></div>
+  <div class="bgset" id="bgD"><div class="bgrow gray fill" data-sp="-30" style="top:180px;font-size:420px">LAACHARI? · LAACHARI? · LAACHARI? ·</div></div>
+  <div class="bgset" id="bgE"><div class="bgrow gold fill" data-sp="-50" style="top:30px;font-size:280px">DIWALI · DIWALI · DIWALI · DIWALI ·</div><div class="bgrow gold stroke" data-sp="45" style="top:790px;font-size:200px">STOCK · BONUS · GALLA KHAALI · STOCK · BONUS ·</div></div>
+  <div class="bgset" id="bgF"><div class="bgrow fill" data-sp="-45" style="top:20px;font-size:240px">VyaparIQ · VyaparIQ · VyaparIQ · VyaparIQ ·</div><div class="bgrow stroke" data-sp="40" style="top:820px;font-size:180px">AI COLLECTIONS OS · AI COLLECTIONS OS · AI COLLECTIONS OS ·</div></div>
+  <div class="bgset" id="bgG"><div class="bgrow stroke" data-sp="-45" style="top:10px;font-size:180px">TAKADA ON AUTOPILOT · TAKADA ON AUTOPILOT · TAKADA ON AUTOPILOT ·</div><div class="bgrow fill" data-sp="40" style="top:840px;font-size:180px">AUTOMATE TAKADA · GET PAID ON TIME · AUTOMATE TAKADA ·</div></div>
+  <div class="bgset" id="bgH"><div class="bgrow green fill" data-sp="-50" style="top:30px;font-size:250px">₹18 LAKH WAPAS · ₹18 LAKH WAPAS · ₹18 LAKH WAPAS ·</div><div class="bgrow green stroke" data-sp="45" style="top:800px;font-size:200px">RISHTA ✓ PAISA ✓ · RISHTA ✓ PAISA ✓ · RISHTA ✓ PAISA ✓ ·</div></div>
+  <div class="bgset" id="bgI"><div class="bgrow fill" data-sp="-45" style="top:20px;font-size:210px">TAKADA NAHI, COLLECTION. · TAKADA NAHI, COLLECTION. ·</div><div class="bgrow stroke" data-sp="40" style="top:830px;font-size:180px">vyapariq.in · vyapariq.in · vyapariq.in · vyapariq.in ·</div></div>
+
+  <div id="world" class="abs" style="inset:0">
+    <div id="glow"></div>
+    <div id="charWrap"><div id="charBreath">
+      <img id="c0" src="assets/char_full.png"><img id="c1" src="assets/char_half.png" style="opacity:0"><img id="c2" src="assets/char_blink.png" style="opacity:0">
+    </div></div>
+
+    <!-- S1 -->
+    <div id="nameTag" class="card" style="left:1170px;top:250px;width:600px;padding:36px 44px">
+      <div class="kicker">Milye</div>
+      <div class="h1" style="font-size:84px;margin-top:16px">Mishra ji</div>
+      <div style="font-size:30px;font-weight:700;color:var(--mut);margin-top:8px">Mishra Textiles · Kanpur</div>
+    </div>
+    <div id="badge30" class="chip" style="left:1170px;top:600px"><span style="font-size:44px;color:var(--p);font-weight:800">30</span> saal ka wholesale</div>
+    <div id="chipNaam" class="chip" style="left:1170px;top:720px"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Naam</div>
+    <div id="chipIzzat" class="chip" style="left:1420px;top:720px"><span class="ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Izzat</div>
+
+    <div id="register" class="card" style="left:1040px;top:120px;width:760px">
+      <div style="padding:30px 30px 18px;display:flex;justify-content:space-between;align-items:flex-end">
+        <div><div style="font-size:22px;font-weight:800;letter-spacing:.14em;color:var(--mut)">UDHAAR REGISTER</div><div class="h1" style="font-size:40px;margin-top:6px">Bazaar mein phansa paisa</div></div>
+      </div>
+      <div class="row reg"><span>Gupta Cloth House</span><span><span class="rd">₹4,80,000</span> <span class="tag" style="background:#FEE2E2;color:#B91C1C">63 din</span></span></div>
+      <div class="row reg"><span>Verma Garments</span><span><span class="rd">₹6,20,000</span> <span class="tag" style="background:#FEE2E2;color:#B91C1C">47 din</span></span></div>
+      <div class="row reg"><span>Khan Fabrics</span><span><span class="rd">₹3,10,000</span> <span class="tag" style="background:#FEE2E2;color:#B91C1C">92 din</span></span></div>
+      <div class="row reg"><span>Agarwal Sarees</span><span><span class="rd">₹7,90,000</span> <span class="tag" style="background:#FEE2E2;color:#B91C1C">38 din</span></span></div>
+      <div style="background:#FFF1F2;padding:26px 30px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:28px;font-weight:800;color:#9F1239">Kul udhaar</span><span id="udhaarNum" class="h1 rd" style="font-size:72px">₹0</span>
+      </div>
+    </div>
+
+    <!-- S2 -->
+    <div id="phone" class="phone" style="left:870px;top:150px">
+      <div class="scr"><div class="av" style="width:110px;height:110px;font-size:40px;background:#F97316">GC</div>
+      <div style="font-weight:800;font-size:26px;margin-top:22px;text-align:center">Gupta Cloth<br>House</div>
+      <div style="opacity:.7;font:600 18px Inter;margin-top:12px">calling…</div>
+      <div style="display:flex;gap:46px;margin-top:150px"><div style="width:64px;height:64px;border-radius:50%;background:#ef4444"></div><div style="width:64px;height:64px;border-radius:50%;background:#22c55e"></div></div></div>
+    </div>
+    <div id="ringA" class="abs" style="left:935px;top:350px;width:120px;height:120px;border-radius:50%;border:5px solid rgba(124,77,255,.6)"></div>
+    <div id="ringB" class="abs" style="left:935px;top:350px;width:120px;height:120px;border-radius:50%;border:5px solid rgba(124,77,255,.6)"></div>
+    <div id="bub1" class="bub" style="left:1180px;top:110px"><div class="who"><div class="av" style="background:#F97316">GC</div>Gupta Cloth House</div><div class="txt">"Arre Mishra ji, cheque toh kal hi nikal gaya tha!"</div></div>
+    <div id="bub2" class="bub" style="left:1240px;top:390px"><div class="who"><div class="av" style="background:#0EA5E9">VG</div>Verma Garments</div><div class="txt">"Is hafte thoda tight hai bhaisaab…"</div></div>
+    <div id="bub3" class="bub" style="left:1160px;top:630px"><div class="who"><div class="av" style="background:#10B981">AS</div>Agarwal Sarees</div><div class="txt">"Aap toh ghar ke ho, agle mahine pakka!"</div></div>
+    <div id="stampKal" class="stamp" style="left:1330px;top:470px;font-size:84px">KAL PAKKA?</div>
+
+    <!-- thought (m01 / m02) -->
+    <div id="thinkGrp" class="abs" style="left:0;top:0">
+      <div class="dot" id="td1" style="left:1010px;top:520px;width:34px;height:34px"></div>
+      <div class="dot" id="td2" style="left:1060px;top:450px;width:54px;height:54px"></div>
+      <div class="think" id="think" style="left:1110px;top:170px;width:700px">
+        <div id="th1" class="h1" style="font-size:62px">Apna hi paisa hai…</div>
+        <div id="th2" class="h1" style="font-size:62px;margin-top:18px;color:var(--mut)">phir bhi maangne mein <span class="rd">sharam?</span></div>
+      </div>
+    </div>
+
+    <!-- S3 Diwali -->
+    <div id="cal" class="card" style="left:1060px;top:110px;width:330px;text-align:center">
+      <div style="background:var(--r);color:#fff;font:900 30px Inter;letter-spacing:.2em;padding:14px">DIWALI</div>
+      <div style="padding:14px 0 6px;position:relative;height:190px">
+        <div id="calNum" class="h1" style="font-size:140px;line-height:1.2">9</div>
+      </div>
+      <div style="font-weight:800;font-size:26px;color:var(--mut);padding:0 0 26px">din baaki</div>
+    </div>
+    <div id="diya" class="abs" style="left:1440px;top:150px;width:300px;height:260px">
+      <div id="flame" style="position:absolute;left:122px;top:0;width:56px;height:96px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(ellipse at 50% 70%,#FFF7C2 0%,#FFD24D 40%,#FF8A00 75%,rgba(255,80,0,0) 100%);filter:blur(.5px);transform-origin:50% 100%"></div>
+      <div style="position:absolute;left:60px;top:70px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(255,190,60,.45),rgba(255,190,60,0) 65%)"></div>
+      <div style="position:absolute;left:40px;top:100px;width:220px;height:90px;border-radius:0 0 120px 120px;background:linear-gradient(180deg,#E8833A,#B4541E);box-shadow:0 14px 30px rgba(180,84,30,.35)"></div>
+      <div style="position:absolute;left:40px;top:92px;width:220px;height:22px;border-radius:50%;background:#F4A261"></div>
+    </div>
+    <div id="needs" class="card" style="left:1060px;top:470px;width:720px">
+      <div style="padding:26px 30px 10px;font-size:22px;font-weight:800;letter-spacing:.14em;color:var(--mut)">DIWALI SE PEHLE CHAHIYE</div>
+      <div class="row" id="need1"><span>Naya stock</span><span>₹8,00,000</span></div>
+      <div class="row" id="need2"><span>Staff ka bonus</span><span>₹2,50,000</span></div>
+      <div class="row" id="need3" style="background:#FFF1F2"><span>Galle mein</span><span class="rd h1" style="font-size:48px">₹0</span></div>
+    </div>
+    <div id="intezaar" class="chip" style="left:1180px;top:860px;font-size:40px;padding:18px 34px;color:var(--mut)"><svg width="44" height="44" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#64748B" stroke-width="2.2" fill="none"/><path id="clockHand" d="M12 12V6" stroke="#E5484D" stroke-width="2.4" stroke-linecap="round" style="transform-origin:12px 12px"/><path d="M12 12h4" stroke="#64748B" stroke-width="2.2" stroke-linecap="round"/></svg>Sirf intezaar…</div>
+
+    <!-- S4 reveal -->
+    <div id="browser" class="browser" style="left:640px;top:96px;width:1200px">
+      <div class="bar"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i><div class="url">app.vyapariq.in/accounts-receivable</div></div>
+      <img src="assets/dash_overview.png" style="display:block;width:100%">
+    </div>
+    <div id="logoCard" class="card" style="left:520px;top:250px;width:880px;padding:50px 60px;display:flex;align-items:center;gap:34px">
+      <img src="assets/logo.jpg" style="width:190px;height:190px;mix-blend-mode:multiply">
+      <div><div class="h1" style="font-size:110px;font-family:Inter;font-weight:900;letter-spacing:-.045em">Vyapar<span class="pur">IQ</span></div>
+      <div id="logoSub" style="font:800 26px Inter;letter-spacing:.32em;color:var(--mut);margin-top:6px">AI COLLECTIONS OS</div></div>
+    </div>
+    <div id="indiaTag" class="chip" style="left:700px;top:600px;font-size:36px;padding:18px 34px">India ka <span class="pur">AI Collections OS</span></div>
+    <div id="bug" class="abs" style="left:40px;top:34px;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.92);padding:10px 20px 10px 12px;border-radius:999px;box-shadow:0 10px 30px rgba(40,20,110,.12)"><img src="assets/logo.jpg" style="width:52px;height:52px;mix-blend-mode:multiply"><span style="font:900 32px Inter;letter-spacing:-.04em">Vyapar<span class="pur">IQ</span></span></div>
+
+    <!-- S5 daily pulse -->
+    <div id="s5title" class="abs" style="left:690px;top:110px;width:470px">
+      <div class="kicker">Daily Pulse</div>
+      <div class="h1" style="font-size:60px;margin-top:20px;white-space:nowrap">Har subah <span class="pur">8 baje</span>,<br>poori report.</div>
+    </div>
+    <div id="toast" class="card" style="left:690px;top:430px;width:470px;padding:24px 26px;border-radius:24px;display:flex;gap:18px;align-items:flex-start">
+      <div style="width:64px;height:64px;border-radius:18px;background:#25D366;flex:none;display:flex;align-items:center;justify-content:center"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M12 2.2a9.7 9.7 0 0 0-8.3 14.8L2.4 21.6l4.8-1.3A9.7 9.7 0 1 0 12 2.2z" fill="#fff"/><path d="M8.6 7.4c.3-.6.6-.6.9-.6h.6c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.6.8c-.1.2-.2.3 0 .6.9 1.6 2 2.6 3.6 3.3.3.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.9.9c.3.1.4.2.4.4 0 .6-.3 1.5-1 1.9-.8.5-1.8.6-3.6-.1-2.4-1-4.2-3.3-4.6-4-.5-.7-1.1-2-.9-3.1.1-.8.6-1.3.9-1.6z" fill="#25D366"/></svg></div>
+      <div><div style="display:flex;justify-content:space-between;font:700 19px Inter;color:var(--mut);width:350px"><span>WhatsApp · VyaparIQ</span><span>8:00 AM</span></div>
+      <div style="font-weight:800;font-size:28px;margin-top:6px">Daily Pulse ready hai</div>
+      <div style="font-weight:600;font-size:21px;color:var(--mut);margin-top:4px">Kal ka collection, aaj ka target, call list…</div></div>
+    </div>
+    <div id="pulse" class="shot" style="left:1190px;top:120px;width:690px"><img src="assets/pulse_card.png">
+      <div class="hl" id="hlA"></div><div class="hl" id="hlB"></div><div class="hl" id="hlC"></div></div>
+    <div id="pLabA" class="chip" style="left:690px;top:440px;font-size:28px"><span class="grn">₹3.24L</span> kal collect hua</div>
+    <div id="pLabB" class="chip" style="left:690px;top:545px;font-size:28px"><span class="pur">₹6.80L</span> aaj ka target</div>
+    <div id="pLabC" class="chip" style="left:690px;top:650px;font-size:28px">Pehle kise <span class="rd">call</span> karein</div>
+
+    <!-- S6 cascade -->
+    <div id="s6title" class="abs" style="left:690px;top:70px">
+      <div class="h1" style="font-size:64px">Takada ab <span id="mjS" style="position:relative;color:var(--mut)">Mishra ji<span id="strike" style="position:absolute;left:-6px;top:50%;height:8px;width:0;background:var(--r);border-radius:4px"></span></span> nahi,</div>
+      <div class="h1" style="font-size:64px"><span class="pur">VyaparIQ</span> karta hai.</div>
+    </div>
+    <div id="recv" class="shot" style="left:690px;top:300px;width:600px"><img src="assets/recv_dash.png"></div>
+    <div id="casc" class="shot" style="left:1340px;top:150px;width:500px"><img src="assets/cascade.png">
+      <div class="hl" id="hc1"></div><div class="hl" id="hc2"></div><div class="hl" id="hc3"></div></div>
+    <div id="aiCall" class="card" style="left:760px;top:640px;width:500px;padding:24px 28px;display:flex;align-items:center;gap:20px;border-radius:24px">
+      <div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#7C4DFF,#A855F7);flex:none;display:flex;align-items:center;justify-content:center"><svg width="36" height="36" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z" fill="#fff"/></svg></div>
+      <div style="flex:1"><div style="font-weight:800;font-size:27px">AI voice call · Hindi</div><div style="font:600 20px Inter;color:var(--mut)">Verma Garments · ₹6,20,000</div>
+      <div id="wave" style="display:flex;gap:5px;align-items:center;height:34px;margin-top:8px"></div></div>
+    </div>
+
+    <!-- S7 promise & risk -->
+    <div id="s7title" class="abs" style="left:690px;top:70px;width:1180px">
+      <div class="h1" style="font-size:60px">Har <span class="rd">"agle hafte pakka"</span> ab <span class="grn">record</span> hota hai.</div>
+    </div>
+    <div id="pBub" class="bub" style="left:700px;top:250px"><div class="who"><div class="av" style="background:#0EA5E9">VG</div>Verma Garments</div><div class="txt">"Agle hafte pakka, bhej dunga!"</div></div>
+    <div id="arrow" class="abs" style="left:1215px;top:300px;font:900 80px Inter;color:var(--p)">→</div>
+    <div id="promise" class="card" style="left:1320px;top:200px;width:540px;padding:28px 32px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800;font-size:28px">Promise-to-Pay</span><span class="tag" style="background:#FEF3C7;color:#B45309">Scheduled</span></div>
+      <div style="display:flex;gap:24px;margin-top:22px;align-items:center">
+        <div style="width:110px;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb;text-align:center"><div style="background:var(--p);color:#fff;font:800 18px Inter;padding:5px">NOV</div><div class="h1" style="font-size:54px;padding:6px 0">28</div></div>
+        <div><div style="font-weight:800;font-size:28px">Verma Garments</div><div style="font:600 21px Inter;color:var(--mut);margin-top:4px">INV-1043 · ₹6,20,000</div><div style="font:700 21px Inter;color:var(--g);margin-top:8px">Follow-up: 28 Nov, 10 AM</div></div>
+      </div>
+      <div id="logged" class="stamp" style="right:22px;bottom:18px;font-size:34px;color:var(--g);border-color:var(--g);border-width:5px;padding:2px 16px;transform:rotate(-10deg)">LOGGED</div>
+    </div>
+    <div id="riskGrp" class="abs" style="left:690px;top:520px">
+      <div class="kicker" style="position:absolute;left:0;top:0;white-space:nowrap">Risk Radar</div>
+      <div id="rk1" class="card" style="left:0;top:70px;width:370px;padding:24px 26px"><div style="display:flex;justify-content:space-between"><b style="font-size:26px">Gupta Cloth</b><span class="tag" style="background:#DCFCE7;color:#15803D">Prompt</span></div><div style="font:600 19px Inter;color:var(--mut);margin-top:6px">Avg 12 din mein pay</div><div class="bar2"><i style="width:30%;background:var(--g)"></i></div></div>
+      <div id="rk2" class="card" style="left:400px;top:70px;width:370px;padding:24px 26px"><div style="display:flex;justify-content:space-between"><b style="font-size:26px">Agarwal Sarees</b><span class="tag" style="background:#FEF3C7;color:#B45309">Slow</span></div><div style="font:600 19px Inter;color:var(--mut);margin-top:6px">Avg 38 din · slowing</div><div class="bar2"><i style="width:62%;background:var(--o)"></i></div></div>
+      <div id="rk3" class="card" style="left:800px;top:70px;width:370px;padding:24px 26px;border:3px solid rgba(229,72,77,.0)"><div style="display:flex;justify-content:space-between"><b style="font-size:26px">Khan Fabrics</b><span id="riskyTag" class="tag" style="background:#FEE2E2;color:#B91C1C">Risky</span></div><div style="font:600 19px Inter;color:var(--mut);margin-top:6px">Credit limit 96% used</div><div class="bar2"><i style="width:96%;background:var(--r)"></i></div></div>
+    </div>
+    <div id="road" class="abs" style="left:690px;top:900px;width:1170px;height:6px;border-radius:3px;background:#E2E8F0"></div>
+    <div id="truck" class="abs" style="left:700px;top:822px;width:190px;height:80px">
+      <div style="position:absolute;left:0;top:0;width:130px;height:62px;border-radius:10px;background:var(--p);color:#fff;font:800 14px Inter;display:flex;align-items:center;justify-content:center;letter-spacing:.05em">MISHRA TEXTILES</div>
+      <div style="position:absolute;left:132px;top:18px;width:54px;height:44px;border-radius:6px 16px 6px 6px;background:#5B34D6"></div>
+      <div style="position:absolute;left:20px;top:56px;width:26px;height:26px;border-radius:50%;background:#1f2937;border:5px solid #9ca3af"></div>
+      <div style="position:absolute;left:140px;top:56px;width:26px;height:26px;border-radius:50%;background:#1f2937;border:5px solid #9ca3af"></div>
+    </div>
+    <div id="barrier" class="abs" style="left:1330px;top:800px;width:20px;height:102px;background:#334155;border-radius:4px">
+      <div id="boom" style="position:absolute;left:10px;top:6px;width:220px;height:18px;border-radius:9px;background:repeating-linear-gradient(90deg,#E5484D 0 30px,#fff 30px 60px);border:2px solid #E5484D;transform-origin:0 50%;transform:rotate(-40deg)"></div>
+    </div>
+    <div id="holdTag" class="chip" style="left:1400px;top:800px;font-size:26px;background:#FEE2E2;color:#B91C1C;border-color:#FCA5A5">HOLD · Risky customer</div>
+
+    <!-- S8 result -->
+    <div id="result" class="card" style="left:1080px;top:200px;width:740px;padding:44px 50px">
+      <div class="kicker" style="background:rgba(22,163,74,.12);color:var(--g)">Diwali se pehle</div>
+      <div id="recNum" class="h1 grn" style="font-size:112px;margin-top:20px;font-family:Inter;font-weight:900">₹0</div>
+      <div style="font-weight:800;font-size:36px;margin-top:4px">Wapas aaya</div>
+      <div class="bar2" style="height:18px;margin-top:30px"><i id="recBar" style="width:0%;background:linear-gradient(90deg,#16A34A,#4ADE80)"></i></div>
+      <div style="display:flex;justify-content:space-between;font:700 22px Inter;color:var(--mut);margin-top:12px"><span>₹22L udhaar</span><span class="grn">82% recovered</span></div>
+    </div>
+    <div id="thinkGrp2" class="abs" style="left:0;top:0">
+      <div class="dot" id="te1" style="left:1010px;top:520px;width:34px;height:34px"></div>
+      <div class="dot" id="te2" style="left:1060px;top:450px;width:54px;height:54px"></div>
+      <div class="think" id="think2" style="left:1110px;top:220px;width:780px">
+        <div id="tk1" class="h1" style="font-size:60px;display:flex;align-items:center;gap:20px"><span class="ok" style="width:60px;height:60px"><svg viewBox="0 0 24 24" style="width:36px;height:36px"><path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rishta bhi bacha…</div>
+        <div id="tk2" class="h1" style="font-size:60px;margin-top:24px;display:flex;align-items:center;gap:20px"><span class="ok" style="width:60px;height:60px"><svg viewBox="0 0 24 24" style="width:36px;height:36px"><path d="M5 12.5l4.2 4.2L19 7" stroke="#fff" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>aur <span class="grn">paisa</span> bhi aaya.</span></div>
+      </div>
+    </div>
+
+    <!-- S9 end -->
+    <div id="stats" class="shot" style="left:700px;top:150px;width:1150px;border-radius:30px"><img src="assets/stats.png"></div>
+    <div id="endLine" class="abs" style="left:700px;top:430px;width:1180px">
+      <div class="h1" style="font-size:96px;color:var(--mut);position:relative;display:inline-block">Takada nahi,<span id="strike2" style="position:absolute;left:-6px;top:52%;height:10px;width:0;background:var(--r);border-radius:5px"></span></div>
+      <div class="h1 pur" style="font-size:150px" id="collWord">collection.</div>
+    </div>
+    <div id="cta" class="card" style="left:690px;top:120px;width:1170px;padding:56px 60px;text-align:center;border-radius:40px">
+      <div style="display:flex;align-items:center;justify-content:center;gap:22px"><img src="assets/logo.jpg" style="width:120px;height:120px;mix-blend-mode:multiply"><div style="text-align:left"><div style="font:900 84px Inter;letter-spacing:-.045em;line-height:1">Vyapar<span class="pur">IQ</span></div><div style="font:800 20px Inter;letter-spacing:.32em;color:var(--mut);margin-top:8px">AI COLLECTIONS OS</div></div></div>
+      <div class="h1" style="font-size:64px;margin-top:40px">Stop Chasing Payments.</div>
+      <div class="h1 grn" style="font-size:64px">Start Collecting Them.</div>
+      <div style="display:flex;justify-content:center;gap:20px;margin-top:38px">
+        <div id="ch7" class="chip" style="position:relative;font-size:28px">7-Day Free Trial</div>
+        <div id="chNo" class="chip" style="position:relative;font-size:28px">No Credit Card</div>
+        <div id="chSet" class="chip" style="position:relative;font-size:28px">Instant Setup</div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:24px;margin-top:40px;align-items:center">
+        <div id="btn" style="background:linear-gradient(135deg,#7C4DFF,#9B5CFF);color:#fff;font-weight:800;font-size:36px;padding:24px 48px;border-radius:999px;box-shadow:0 20px 50px rgba(124,77,255,.45)">Start Free Trial →</div>
+        <div id="urlPill" style="border:3px solid var(--g);color:var(--g);font:800 36px Inter;padding:21px 44px;border-radius:999px">vyapariq.in</div>
+      </div>
+    </div>
+    <div id="cursor" class="abs" style="left:1100px;top:1000px;width:44px;height:44px"><svg viewBox="0 0 24 24" width="44" height="44"><path d="M4 2l15 9-6.5 1.5L16 20l-3 1.5-3.5-7.5L4 18z" fill="#0F172A" stroke="#fff" stroke-width="1.5"/></svg></div>
+    <div id="clickRing" class="abs" style="width:90px;height:90px;border-radius:50%;border:5px solid var(--p);left:1077px;top:877px;opacity:0"></div>
+  </div>
+
+  <div id="cool"></div>
+  <canvas id="conf" width="1920" height="1080"></canvas>
+  <div id="vig"></div>
+  <div id="wipe"></div>
+  <div id="flash"></div>
+  <div id="cap"><div id="capBox"></div></div>
+</div>
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script src="data.js"></script>
+<script src="anim.js"></script>
+</body></html>
