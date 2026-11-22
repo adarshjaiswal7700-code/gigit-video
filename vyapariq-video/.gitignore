@@ -1,3 +1,4 @@
 node_modules/
 out/stills/
 out/video_silent.mp4
+merge/build/

@@ -1,6 +1,9 @@
 /* ---------- VyaparIQ demo video – master timeline ----------
    48 s @ 30 fps. Music is 100 BPM, so one beat = 0.6 s; every major cut sits on that grid. */
 const DURATION = 48;
+const PORTRAIT = new URLSearchParams(location.search).has('portrait');
+// card positions [left, top, width] for the 9:16 intro (same order as the cards in ui.js)
+const PORTRAIT_CARDS = [[50, 250, 470], [440, 70, 580], [600, 470, 380], [60, 1190, 430], [110, 1430, 1160], [610, 1120, 390], [-140, 620, 400]];
 const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -62,7 +65,7 @@ function buildTimeline() {
   scene('s1', 0, 4.8);
   tl.set([twA.caret, twB.caret], { opacity: 0 }, 0);
   const endA = typeOn(twA, 0.12);
-  tl.fromTo('#s1-text', { scale: 1 }, { scale: 0.64, duration: 0.55, ease: 'power3.inOut' }, 1.0);
+  tl.fromTo('#s1-text', { scale: 1 }, { scale: PORTRAIT ? 0.84 : 0.64, duration: 0.55, ease: 'power3.inOut' }, 1.0);
   blink(twA.caret, endA, 2.3);
   tl.set(twA.chars, { visibility: 'hidden' }, 2.3).set(twA.caret, { opacity: 0 }, 2.3);
   const endB = typeOn(twB, 2.36);
@@ -342,7 +345,9 @@ function buildTimeline() {
   const params = new URLSearchParams(location.search);
   const render = params.has('render');
   if (render) document.body.classList.add('render');
+  if (PORTRAIT) document.body.classList.add('portrait');
   await buildDOM();
+  if (PORTRAIT) $$('#s1-cards [data-c]').forEach((c, i) => { const [l, t, w] = PORTRAIT_CARDS[i]; Object.assign(c.style, { left: l + 'px', top: t + 'px', width: w + 'px' }); });
   await Promise.all([
     '300 100px "Plus Jakarta Sans Variable"', '400 100px "Plus Jakarta Sans Variable"', '800 100px "Plus Jakarta Sans Variable"',
     '400 20px "Inter Variable"', '700 20px "Inter Variable"',
@@ -357,7 +362,7 @@ function buildTimeline() {
 
   /* ---- interactive preview ---- */
   const stage = $('#stage'), audio = $('#audio'), scrub = $('#scrub'), time = $('#time');
-  const fit = () => { const s = Math.min(innerWidth / 1920, (innerHeight - 50) / 1080); stage.style.transform = `scale(${s})`; };
+  const fit = () => { const W = PORTRAIT ? 1080 : 1920, H = PORTRAIT ? 1920 : 1080; const s = Math.min(innerWidth / W, (innerHeight - 50) / H); stage.style.transform = `scale(${s})`; };
   fit(); addEventListener('resize', fit);
   let playing = false;
   const loop = () => { if (!playing) return; const t = audio.currentTime; tl.seek(t); scrub.value = t; time.textContent = t.toFixed(2) + 's';

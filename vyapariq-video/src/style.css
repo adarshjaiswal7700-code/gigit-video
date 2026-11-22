@@ -45,6 +45,17 @@ body.render #controls { display: none; }
     radial-gradient(ellipse 40% 40% at 10% 100%, rgba(180,140,255,.22), rgba(255,255,255,0) 70%),
     #fcfdfc; }
 
+/* ---------- portrait 9:16 layout (intro) ---------- */
+body.portrait #stage { width: 1080px; height: 1920px; }
+body.portrait #s1-text .cap { font-size: 96px !important; }
+body.portrait #s2-logo svg { width: 160px !important; height: 160px !important; }
+body.portrait #s2-logo > div { font-size: 128px !important; }
+body.portrait #s2-logo { gap: 26px !important; }
+body.portrait #s2-pill { top: 1030px !important; height: 100px !important; padding: 0 40px 0 32px !important; }
+body.portrait #s2-pill .cap { font-size: 44px !important; }
+body.portrait #s2-pill svg { width: 40px; height: 40px; }
+body.portrait #s2-meet { font-size: 150px !important; }
+
 /* ---------- typography ---------- */
 .cap { font-weight: 400; letter-spacing: -0.025em; white-space: nowrap; line-height: 1.15; }
 .cap .w { display: inline-block; will-change: transform, filter, opacity; }

@@ -55,3 +55,15 @@ Browser preview (audio ke saath): project folder ko kisi static server se serve 
 - Fonts: Plus Jakarta Sans + Inter (Fontsource, OFL).
 
 Video mein saare log, companies, GSTIN, bank details fictional hain.
+
+## 9:16 merged version (`merge/`)
+
+**Final:** `merge/out/vyapariq-full-portrait.mp4` — 92 s, 1080×1920, 60fps.
+
+1. Portrait intro (0 – 7.85 s): same intro as the landscape video, re-laid out for 9:16
+   (`node scripts/render.cjs --portrait --fps 60 --from 0 --to 7.85 --out merge/build/intro_portrait_silent.mp4`).
+2. `Vyapaar_Iq_1.mp4` appended unchanged (7.85 – 92.03 s).
+3. Audio: original voice removed (ElevenLabs stem separation, music stems kept), new voiceover in
+   ElevenLabs **Brian** (`Gubgw9l4dtIoQA9YZHgx`). Each transcript line starts at its original time + 7.85 s
+   (`merge/voiceover.py`), intro gets two new lines matching the on-screen text. `merge/build_final.sh` mixes and joins.
+   Spellings `Vyapaar I.Q.` and `Saaras AI` are used so the voice pronounces them correctly.

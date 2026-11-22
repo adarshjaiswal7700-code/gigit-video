@@ -13,9 +13,11 @@ try { ({ chromium } = require('playwright')); }
 catch { ({ chromium } = require(path.join(require('child_process').execSync('npm root -g').toString().trim(), 'playwright'))); }
 
 const ROOT = path.resolve(__dirname, '..');
-const FPS = 30;
 const args = process.argv.slice(2);
 const arg = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
+const FPS = +arg('--fps', 30);
+const PORTRAIT = args.includes('--portrait');
+const VW = PORTRAIT ? 1080 : 1920, VH = PORTRAIT ? 1920 : 1080;
 
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml',
   '.woff2': 'font/woff2', '.json': 'application/json', '.m4a': 'audio/mp4', '.mp3': 'audio/mpeg', '.png': 'image/png', '.jpg': 'image/jpeg' };
@@ -33,9 +35,9 @@ function serve() {
 
 (async () => {
   const srv = await serve();
-  const url = `http://127.0.0.1:${srv.address().port}/index.html?render=1`;
+  const url = `http://127.0.0.1:${srv.address().port}/index.html?render=1${PORTRAIT ? '&portrait=1' : ''}`;
   const browser = await chromium.launch({ args: ['--force-color-profile=srgb', '--disable-lcd-text'] });
-  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: VW, height: VH }, deviceScaleFactor: 1 });
   page.on('console', m => { if (m.type() === 'error') console.error('[page]', m.text()); });
   page.on('pageerror', e => console.error('[pageerror]', e.message));
   await page.goto(url);
