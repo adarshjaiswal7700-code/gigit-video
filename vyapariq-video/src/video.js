@@ -98,9 +98,12 @@ function buildTimeline() {
 
   /* ===== S3b · NEW MAIL MORPH  9.45 – 10.8  (beat drop at 9.6) ===== */
   scene('s3b', 9.42, 10.82);
+  // measure the real text width so "New mail" is never clipped
+  const nmTxtW = Math.ceil($('#nm-txt').scrollWidth) + 6;
+  const nmBtnW = 64 + 26 + nmTxtW + 2 * 80;      // icon + gap + text + side padding
   tl.fromTo('#nm-btn', { opacity: 0, scale: 1.12, filter: 'blur(14px)', width: 300 }, { opacity: 1, scale: 1, filter: 'blur(0px)', width: 300, duration: 0.22 }, 9.42);
-  tl.fromTo('#nm-txt', { width: 0, opacity: 0 }, { width: 290, opacity: 1, duration: 0.4, ease: 'power3.out' }, 9.6);
-  tl.to('#nm-btn', { width: 620, duration: 0.4, ease: 'power3.out' }, 9.6);
+  tl.fromTo('#nm-txt', { width: 0, opacity: 0 }, { width: nmTxtW, opacity: 1, duration: 0.4, ease: 'power3.out' }, 9.6);
+  tl.to('#nm-btn', { width: nmBtnW, duration: 0.4, ease: 'power3.out' }, 9.6);
   tl.fromTo('#nm-fill', { opacity: 0, xPercent: -60 }, { opacity: 1, xPercent: 0, duration: 0.35 }, 9.6);
   tl.fromTo('#nm-strip', { scaleX: 0.25, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.5, ease: 'expo.out' }, 9.75);
   tl.to('#nm-fill', { opacity: 0.0, duration: 0.5, ease: 'power2.inOut' }, 10.1);
