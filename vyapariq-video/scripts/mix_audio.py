@@ -1,9 +1,10 @@
 """Mix the music bed with UI sound effects -> out/audio.m4a
 Each cue: (time in seconds, sfx name, gain in dB). Times match src/video.js."""
-import subprocess, os
+import subprocess, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MUSIC = os.path.join(ROOT, 'assets', 'music.mp3')
+# Usage: python3 scripts/mix_audio.py [music file]   (default: the reference video's track)
+MUSIC = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'assets', 'music-reference.m4a')
 CUES = [
     (0.10, 'type', -15), (2.34, 'type', -15),
     (1.00, 'pop', -16),

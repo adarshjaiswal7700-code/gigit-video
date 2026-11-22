@@ -36,7 +36,7 @@ Music 100 BPM hai (1 beat = 0.6s) aur saare major cuts usi grid par hain.
 
 ```bash
 npm install
-python3 scripts/mix_audio.py              # out/audio.m4a  (music + SFX, -14 LUFS)
+python3 scripts/mix_audio.py [music file]  # out/audio.m4a  (music + SFX, -14 LUFS)
 node scripts/render.cjs                   # out/video_silent.mp4 (Playwright + ffmpeg)
 ffmpeg -i out/video_silent.mp4 -i out/audio.m4a -c:v copy -c:a copy -shortest out/vyapariq-demo.mp4
 ```
@@ -47,7 +47,10 @@ Browser preview (audio ke saath): project folder ko kisi static server se serve 
 ## Assets
 
 - `assets/logo.svg` — diye gaye logo se vectorize kiya gaya (lines `currentColor`, arrow gradient).
-- `assets/music.mp3` — ElevenLabs Music se generate kiya gaya instrumental (100 BPM).
+- `assets/music-reference.m4a` — reference video ka original music (abhi final video mein yahi hai).
+  Iska license aapke paas nahi hai; publish karne se pehle licensed track lagayein.
+- `assets/music.mp3` — ElevenLabs Music se generate kiya gaya instrumental (100 BPM). Wapas lagane ke liye:
+  `python3 scripts/mix_audio.py assets/music.mp3`
 - `assets/sfx/*` — ElevenLabs sound effects (click, whoosh, scan, success, pop, typing).
 - Fonts: Plus Jakarta Sans + Inter (Fontsource, OFL).
 
