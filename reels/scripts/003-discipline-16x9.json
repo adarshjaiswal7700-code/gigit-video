@@ -20,7 +20,7 @@
   "music": false,
   "lines": [
     {
-      "tts": "[excited] पैसा कमाने के लिए motivation नहीं, discipline चाहिए!",
+      "tts": "[serious] पैसा कमाने के लिए motivation नहीं, discipline चाहिए!",
       "cap": "Paisa kamane ke liye motivation nahi, discipline chahiye.",
       "hl": [
         "discipline"
@@ -35,7 +35,7 @@
       ]
     },
     {
-      "tts": "[energetic] लेकिन discipline तुम्हें उन दिनों में भी काम करवाता है,",
+      "tts": "[serious] लेकिन discipline तुम्हें उन दिनों में भी काम करवाता है,",
       "cap": "Lekin discipline tumhe un dino mein bhi kaam karwata hai,",
       "hl": [
         "discipline"
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "tts": "[excited] Wealth एक दिन में नहीं बनती।",
+      "tts": "[serious] Wealth एक दिन में नहीं बनती।",
       "cap": "Wealth ek din mein nahi banti.",
       "hl": [
         "Wealth"
@@ -66,11 +66,12 @@
     }
   ],
   "voice_settings": {
-    "stability": 0.3,
+    "stability": 0.45,
     "similarity_boost": 0.85,
-    "style": 0.65,
+    "style": 0.45,
     "use_speaker_boost": true,
-    "speed": 1.06
+    "speed": 1.0
   },
-  "sfx": "minimal"
+  "sfx": "minimal",
+  "logo_bg": "black"
 }

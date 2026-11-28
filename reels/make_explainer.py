@@ -516,9 +516,17 @@ def main(spec_path):
             place_card(frame, *card_mood(t), 1170, 190, t, L[3]["start"] + 0.15, T_zoom_out - 0.1)
 
         # end logo
-        if t >= logo_in:
-            k = (t - logo_in) / 0.8
-            stamp(frame, ink_logo, W / 2, H / 2, ease_out(k), 0.94 + 0.06 * ease_out(k))
+        if t >= logo_in - 0.2:
+            if spec.get("logo_bg", "black") == "black":
+                # cut to a black end card with the white logo (like the original logo artwork)
+                kb = ease_in_out((t - (logo_in - 0.2)) / 0.45)
+                frame = Image.blend(frame, Image.new("RGBA", (W, H), (0, 0, 0, 255)), kb)
+                lg = logo
+            else:
+                lg = ink_logo
+            k = (t - (logo_in + 0.15)) / 0.8
+            if k > 0:
+                stamp(frame, lg, W / 2, H / 2, ease_out(k), 0.94 + 0.06 * ease_out(k))
 
         # captions
         for s, e, sp in cap_spans:
@@ -529,7 +537,8 @@ def main(spec_path):
 
         # fade out at the very end
         if t > dur - 0.3:
-            frame = Image.blend(frame, Image.new("RGBA", (W, H), WHITE + (255,)), clamp01((t - (dur - 0.3)) / 0.3))
+            end_col = (0, 0, 0) if spec.get("logo_bg", "black") == "black" else WHITE
+            frame = Image.blend(frame, Image.new("RGBA", (W, H), end_col + (255,)), clamp01((t - (dur - 0.3)) / 0.3))
         enc.stdin.write(frame.convert("RGB").tobytes())
         if fi % 90 == 0:
             print(f"frame {fi}/{nframes}", flush=True)
