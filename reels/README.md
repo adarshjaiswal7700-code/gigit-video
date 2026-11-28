@@ -24,3 +24,16 @@ captions → dark 1080×1920 reel.
 
 The ElevenLabs key is injected by the cloud environment's proxy, so no key is needed in code.
 `build/` is not committed.
+
+## 16:9 explainer style (white background, person cut-out, cards)
+
+`make_explainer.py` makes a landscape 1920×1080 video: white background with a slow marquee,
+the person cut-out (`assets/person-cutout.png`) rising in from the bottom, animated cards on the
+right, CAPS captions (max 2 words, black + red) and the logo at the end.
+It reuses the voice/music/word timings of another build (`audio_from` in the spec):
+
+```bash
+python3 make_explainer.py scripts/003-discipline-16x9.json
+```
+
+The cards are written for the discipline script; a new script needs new card scenes.
