@@ -1,0 +1,19 @@
+{
+  "id": "001-paisa-control",
+  "title": "Paisa control karo",
+  "reference": "Motivational clip: 'If you can't control your own brain... it's over' (problem -> solution -> warning -> repeated ending)",
+  "voice_id": "CwC6av1rPz6HaAYIqx5i",
+  "model_id": "eleven_v4",
+  "lines": [
+    {"tts": "अगर तुम अपने पैसे को control नहीं कर सकते,", "cap": "Agar tum apne paise ko control nahi kar sakte,", "hl": ["control"]},
+    {"tts": "और पैसा तुम्हें control करता है...", "cap": "aur paisa tumhe control karta hai...", "hl": ["control"]},
+    {"tts": "तो तुम ख़त्म हो।", "cap": "toh tum khatam ho.", "hl": ["khatam"], "pause": 0.9},
+    {"tts": "तुम्हें अपने पैसे को बताना पड़ेगा,", "cap": "Tumhe apne paise ko batana padega,", "hl": ["batana"]},
+    {"tts": "कहाँ जाना है, कितना जाना है, और कब वापस आना है।", "cap": "kahan jaana hai, kitna jaana hai, aur kab wapas aana hai.", "hl": ["kahan", "kitna", "kab"], "pause": 0.8},
+    {"tts": "पहले बचाओ। फिर खर्च करो।", "cap": "Pehle bachao. Phir kharch karo.", "hl": ["Pehle", "bachao"], "pause": 0.6},
+    {"tts": "वरना salary आएगी... और चली जाएगी।", "cap": "Warna salary aayegi... aur chali jaayegi.", "hl": ["salary"], "pause": 0.8},
+    {"tts": "Control करो।", "cap": "Control karo.", "hl": ["Control"], "pause": 0.6},
+    {"tts": "वरना... खेल ख़त्म।", "cap": "Warna... khel khatam.", "hl": ["khel", "khatam"], "pause": 0.9},
+    {"tts": "खेल ख़त्म।", "cap": "Khel khatam.", "hl": ["Khel", "khatam"]}
+  ]
+}
