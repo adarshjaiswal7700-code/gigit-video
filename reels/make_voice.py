@@ -67,6 +67,8 @@ def word_spans(alignment):
     for w, s, e in words:
         if s is None:  # pure punctuation token: glue onto previous word
             continue
+        if w.startswith("[") and w.endswith("]"):  # audio tag like [excited], not spoken
+            continue
         out.append((w, s, e))
     return out
 

@@ -305,6 +305,13 @@ def main(spec_path):
         (logo_in - 0.35, "whoosh", 0.35),
         (logo_in, "logo", 0.75),
     ]
+    if spec.get("sfx") == "minimal":
+        # only a whisper of a whoosh on card changes and a soft logo hit
+        keep = {T_move, trig(0, "motivation") - 0.15, L[1]["start"] - 0.2, L[2]["start"] - 0.2, T_zoom_out}
+        sfx_events = [(t, n, 0.12) for t, n, g in sfx_events if n == "whoosh" and t in keep]
+        sfx_events.append((logo_in, "logo", 0.3))
+    elif spec.get("sfx") == "none":
+        sfx_events = []
     CX = 990  # card column
 
     def section(t):
@@ -555,7 +562,10 @@ def main(spec_path):
     wav = os.path.join(bdir, "mix.f32")
     mix.tofile(wav)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", out, "-f", "f32le", "-ar", str(ASR), "-ac", "1",
-                    "-i", wav, "-filter_complex", "[1:a]loudnorm=I=-14:TP=-1.0:LRA=11[a]",
+                    "-i", wav, "-filter_complex",
+                    "[1:a]acompressor=threshold=-24dB:ratio=3:attack=4:release=80:makeup=2,"
+                    f"loudnorm=I={spec.get('loudness', -10)}:TP=-0.5:LRA=6,"
+                    "alimiter=limit=0.9:attack=2:release=40:level=disabled[a]",
                     "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
                     "-ar", "48000", "-shortest", "-movflags", "+faststart", final], check=True)
     os.remove(wav)
