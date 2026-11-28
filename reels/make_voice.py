@@ -94,6 +94,26 @@ def main(script_path):
     lead = 0.25  # small breath before the first word
     pieces.append(np.zeros(int(lead * SR), dtype=np.float32))
     t = lead
+    if spec.get("single_take"):
+        # whole script in one request: natural, continuous flow (no stitched pauses)
+        res = tts(spec["voice_id"], spec["model_id"], " ".join(l["tts"] for l in lines), "", "", settings)
+        audio = decode_mp3(base64.b64decode(res["audio_base64"]))
+        spans = word_spans(res["alignment"])
+        caps = [(i, c, {h.lower().strip(PUNCT) for h in l.get("hl", [])})
+                for i, l in enumerate(lines) for c in l["cap"].split()]
+        if len(spans) != len(caps):
+            sys.exit(f"{len(spans)} spoken words vs {len(caps)} caption words")
+        a = max(0.0, spans[0][1] - 0.04)
+        b = min(len(audio) / SR, spans[-1][2] + 0.15)
+        seg = audio[int(a * SR):int(b * SR)].copy()
+        fade = int(0.01 * SR)
+        seg[:fade] *= np.linspace(0, 1, fade)
+        seg[-fade:] *= np.linspace(1, 0, fade)
+        for (spoken, s, e), (i, cap, hl) in zip(spans, caps):
+            words_out.append({"word": cap, "start": round(t + s - a, 3), "end": round(t + e - a, 3),
+                              "hl": cap.lower().strip(PUNCT) in hl, "line": i})
+        pieces += [seg, np.zeros(int(0.8 * SR), dtype=np.float32)]
+        lines = []
     for i, line in enumerate(lines):
         prev_text = " ".join(l["tts"] for l in lines[max(0, i - 2):i])
         next_text = " ".join(l["tts"] for l in lines[i + 1:i + 2])

@@ -280,6 +280,31 @@ def main(spec_path):
     # timings
     T_move = trig(0, "motivation") - 0.35
     T_zoom_in, T_zoom_out = L[3]["start"] - 0.15, L[4]["start"] - 0.1
+
+    # sound effects, timed to the same beats as the animations: (time, name, gain)
+    t_c0 = trig(2, "discipline")
+    c_span = max(1.2, L[2]["end"] - t_c0 - 0.2)
+    sfx_events = [
+        (0.0, "rise", 0.55),
+        (T_move, "whoosh", 0.35),
+        (trig(0, "motivation") - 0.15, "whoosh", 0.45),
+        (trig(0, "nahi"), "strike", 0.5),
+        (trig(0, "discipline"), "pop", 0.6),
+        (L[1]["start"] - 0.2, "whoosh", 0.45),
+        (trig(1, "ek"), "pop", 0.6),
+        (L[2]["start"] - 0.2, "whoosh", 0.45),
+        *[(t_c0 + i * c_span / 6, "pop", 0.4) for i in range(7)],
+        (T_zoom_in, "zoom", 0.55),
+        (L[3]["start"] + 0.1, "pop", 0.4),
+        (T_zoom_out, "whoosh", 0.5),
+        (trig(4, "nahi"), "strike", 0.5),
+        (trig(5, "daily"), "sweep", 0.3),
+        (trig(5, "daily"), "pop", 0.5),
+        (trig(5, "decisions"), "pop", 0.5),
+        (trig(5, "banti"), "pop", 0.5),
+        (logo_in - 0.35, "whoosh", 0.35),
+        (logo_in, "logo", 0.75),
+    ]
     CX = 990  # card column
 
     def section(t):
@@ -504,20 +529,36 @@ def main(spec_path):
     enc.stdin.close()
     enc.wait()
 
-    # audio: voice + ducked music
+    # audio: voice + sound effects on the animation beats (no music)
     final = os.path.join(bdir, f"{spec['id']}.mp4")
-    voice = os.path.join(adir, "voice.wav")
-    music = os.path.join(adir, "music.mp3")
-    mvol = spec.get("music_volume", 0.30)
-    fc = (f"[1:a]apad=whole_dur={dur:.3f},asplit=2[v][vsc];"
-          f"[2:a]atrim=0:{dur:.3f},asetpts=PTS-STARTPTS,volume={mvol},"
-          f"afade=t=in:d=0.8,afade=t=out:st={dur - 1.5:.3f}:d=1.5[m];"
-          f"[m][vsc]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=350[md];"
-          f"[v][md]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-14:TP=-1.0:LRA=9[a]")
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", out, "-i", voice, "-i", music,
-                    "-filter_complex", fc, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
-                    "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-shortest",
-                    "-movflags", "+faststart", final], check=True)
+    ASR = 48000
+
+    def load(path):
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-i", path, "-f", "f32le", "-ac", "1", "-ar", str(ASR),
+                              "pipe:1"], capture_output=True, check=True).stdout
+        return np.frombuffer(raw, np.float32).copy()
+
+    mix = np.zeros(int(dur * ASR) + ASR, np.float32)
+    v = load(os.path.join(adir, "voice.wav"))
+    mix[:len(v)] += v
+    sfx_cache = {}
+    for at, name, gain in sfx_events:
+        if name not in sfx_cache:
+            s = load(os.path.join(ROOT, "assets", "sfx", f"{name}.mp3"))
+            sfx_cache[name] = s / (np.max(np.abs(s)) or 1.0)
+        s = sfx_cache[name] * gain
+        i = max(0, int(at * ASR))
+        n = min(len(s), len(mix) - i)
+        mix[i:i + n] += s[:n]
+    mix = mix[:int(dur * ASR)]
+    mix /= max(1.0, float(np.max(np.abs(mix))) / 0.95)
+    wav = os.path.join(bdir, "mix.f32")
+    mix.tofile(wav)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", out, "-f", "f32le", "-ar", str(ASR), "-ac", "1",
+                    "-i", wav, "-filter_complex", "[1:a]loudnorm=I=-14:TP=-1.0:LRA=11[a]",
+                    "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                    "-ar", "48000", "-shortest", "-movflags", "+faststart", final], check=True)
+    os.remove(wav)
     os.remove(out)
     print("done ->", final)
 
