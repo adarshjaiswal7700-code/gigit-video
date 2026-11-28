@@ -1,0 +1,16 @@
+{
+  "id": "002-discipline",
+  "title": "Motivation nahi, discipline",
+  "voice_id": "CwC6av1rPz6HaAYIqx5i",
+  "model_id": "eleven_v4",
+  "theme": "minimal",
+  "logo": "assets/ajex-logo.png",
+  "lines": [
+    {"tts": "पैसा कमाने के लिए motivation नहीं, discipline चाहिए।", "cap": "Paisa kamane ke liye motivation nahi, discipline chahiye.", "hl": ["discipline"], "pause": 0.7},
+    {"tts": "Motivation तुम्हें एक दिन काम करवा सकती है।", "cap": "Motivation tumhe ek din kaam karwa sakti hai.", "hl": ["ek", "din"], "pause": 0.5},
+    {"tts": "लेकिन discipline तुम्हें उन दिनों में भी काम करवाता है,", "cap": "Lekin discipline tumhe un dino mein bhi kaam karwata hai,", "hl": ["discipline"]},
+    {"tts": "जब तुम्हारा मन बिल्कुल नहीं करता।", "cap": "jab tumhara mann bilkul nahi karta.", "hl": ["bilkul", "nahi"], "pause": 0.8},
+    {"tts": "Wealth एक दिन में नहीं बनती।", "cap": "Wealth ek din mein nahi banti.", "hl": ["Wealth"], "pause": 0.5},
+    {"tts": "Daily decisions से बनती है।", "cap": "Daily decisions se banti hai.", "hl": ["Daily", "decisions"]}
+  ]
+}

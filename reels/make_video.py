@@ -25,6 +25,18 @@ F_TAG = ImageFont.truetype(f"{FONT_DIR}/Inter-SemiBold.otf", 30)
 F_RUPEE = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 1150)
 PUNCT = ",.!?।…\"'—-"
 MAX_CHUNK_WORDS = 3
+RED = (229, 27, 36)
+THEMES = {
+    # original look: gold keywords, glow, rupee motif, grain, tag + progress bar
+    "money": {"fx": True, "hl": GOLD, "glow": True, "shadow": True, "chrome": True,
+              "final_scale": 1.25, "f_reg": F_REG, "f_hl": F_HL},
+    # pure black, white text, red keywords, nothing else
+    "minimal": {"fx": False, "hl": RED, "glow": False, "shadow": False, "chrome": False,
+                "final_scale": 1.0,
+                "f_reg": ImageFont.truetype(f"{FONT_DIR}/Inter-Medium.otf", 88),
+                "f_hl": ImageFont.truetype(f"{FONT_DIR}/Inter-Bold.otf", 88)},
+}
+TH = THEMES["money"]
 MAX_LINE_W = 920
 FINAL_SCALE = 1.25
 
@@ -94,17 +106,19 @@ def word_sprite(text, hl):
     key = (text, hl)
     if key in _word_cache:
         return _word_cache[key]
-    font = F_HL if hl else F_REG
+    font = TH["f_hl"] if hl else TH["f_reg"]
     l, t, r, b = font.getbbox(text)
     pad = 40
     w, h = r - l + pad * 2, (b - t) + pad * 2
-    color = GOLD if hl else WHITE
+    color = TH["hl"] if hl else WHITE
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     ImageDraw.Draw(img).text((pad - l, pad - t), text, font=font, fill=color + (255,))
     shadow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     ImageDraw.Draw(shadow).text((pad - l, pad - t + 4), text, font=font, fill=(0, 0, 0, 200))
     shadow = shadow.filter(ImageFilter.GaussianBlur(10))
-    if hl:
+    if not TH["shadow"]:
+        shadow = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    if hl and TH["glow"]:
         glow = img.filter(ImageFilter.GaussianBlur(18))
         ga = np.array(glow, dtype=np.float32)
         ga[..., 3] *= 0.85
@@ -148,13 +162,23 @@ def layout_chunk(chunk, scale=1.0):
 
 # ---------------------------------------------------------------- main
 def main(script_path):
+    global TH, FINAL_SCALE
     spec = json.load(open(script_path))
+    TH = THEMES[spec.get("theme", "money")]
+    FINAL_SCALE = TH["final_scale"]
     root = os.path.dirname(os.path.abspath(__file__))
     bdir = os.path.join(root, "build", spec["id"])
     data = json.load(open(os.path.join(bdir, "words.json")))
     words = data["words"]
     voice_dur = data["duration"]
     dur = voice_dur + 0.7
+    logo = None
+    if spec.get("logo"):
+        logo = Image.open(os.path.join(root, spec["logo"])).convert("RGBA")
+        lw = spec.get("logo_width", 600)
+        logo = logo.resize((lw, round(logo.height * lw / logo.width)), Image.LANCZOS)
+        logo_in = words[-1]["end"] + 0.7
+        dur = logo_in + spec.get("logo_hold", 2.6)
     nframes = int(math.ceil(dur * FPS))
     tag = spec.get("tag", "PAISA  ·  MINDSET")
     handle = spec.get("handle", "")
@@ -202,18 +226,20 @@ def main(script_path):
         t = f / FPS
         p = t / dur
         # background: base + breathing gold glow + slowly growing rupee
-        intensity = 0.10 + 0.22 * sm[f]
-        base[:] = BG
-        base += glow * np.array(GOLD, np.float32) * intensity * 0.35
-        scale = 1.0 + 0.10 * p
-        rw, rh = int(W * scale), int(H * scale)
-        r = rupee.resize((rw, rh), Image.BILINEAR).crop(((rw - W) // 2, (rh - H) // 2,
-                                                          (rw - W) // 2 + W, (rh - H) // 2 + H))
-        ra = np.asarray(r, np.float32)[..., None] / 255.0
-        base += ra * np.array(GOLD, np.float32) * (0.045 + 0.05 * sm[f])
-        base *= vign
-        base += grain[(f // 2) % len(grain)][..., None] * 0.06
-        frame = Image.fromarray(base.clip(0, 255).astype(np.uint8), "RGB").convert("RGBA")
+        if not TH["fx"]:
+            frame = Image.new("RGBA", (W, H), (0, 0, 0, 255))
+        else:
+            base[:] = BG
+            base += glow * np.array(GOLD, np.float32) * (0.10 + 0.22 * sm[f]) * 0.35
+            scale = 1.0 + 0.10 * p
+            rw, rh = int(W * scale), int(H * scale)
+            r = rupee.resize((rw, rh), Image.BILINEAR).crop(((rw - W) // 2, (rh - H) // 2,
+                                                              (rw - W) // 2 + W, (rh - H) // 2 + H))
+            ra = np.asarray(r, np.float32)[..., None] / 255.0
+            base += ra * np.array(GOLD, np.float32) * (0.045 + 0.05 * sm[f])
+            base *= vign
+            base += grain[(f // 2) % len(grain)][..., None] * 0.06
+            frame = Image.fromarray(base.clip(0, 255).astype(np.uint8), "RGB").convert("RGBA")
 
         # captions
         for start, end, items in spans:
@@ -243,8 +269,18 @@ def main(script_path):
                     sp = Image.fromarray(arr)
                 frame.alpha_composite(sp, (int(cx - sp.width / 2), int(cy - sp.height / 2)))
 
+        # end logo
+        if logo is not None and t >= logo_in:
+            k = ease_out((t - logo_in) / 0.7)
+            s = 0.94 + 0.06 * k
+            lg = logo.resize((max(1, int(logo.width * s)), max(1, int(logo.height * s))), Image.LANCZOS)
+            arr = np.array(lg)
+            arr[..., 3] = (arr[..., 3] * k).astype(np.uint8)
+            lg = Image.fromarray(arr)
+            frame.alpha_composite(lg, (int(W / 2 - lg.width / 2), int(H / 2 - lg.height / 2)))
+
         # chrome: tag line, handle, progress bar
-        top_a = min(1.0, t / 0.6)
+        top_a = min(1.0, t / 0.6) if TH["chrome"] else 0
         if top_a > 0:
             ta = np.array(tag_img)
             ta[..., 3] = (ta[..., 3] * top_a).astype(np.uint8)
@@ -252,7 +288,8 @@ def main(script_path):
         d = ImageDraw.Draw(frame)
         if handle:
             d.text((W / 2, H - 170), handle, font=F_TAG, fill=WHITE + (110,), anchor="mm")
-        d.rectangle([0, H - 8, int(W * p), H], fill=GOLD + (200,))
+        if TH["chrome"]:
+            d.rectangle([0, H - 8, int(W * p), H], fill=GOLD + (200,))
 
         # final fade to black
         if t > dur - 0.35:
@@ -272,10 +309,10 @@ def main(script_path):
     if os.path.exists(music):
         fc = (f"[2:a]atrim=0:{dur:.3f},asetpts=PTS-STARTPTS,volume={mvol},"
               f"afade=t=in:d=0.8,afade=t=out:st={dur - 1.5:.3f}:d=1.5[m];"
-              f"[1:a]asplit=2[v][vsc];"
+              f"[1:a]apad=whole_dur={dur:.3f},asplit=2[v][vsc];"
               f"[m][vsc]sidechaincompress=threshold=0.03:ratio=6:attack=15:release=350[md];"
               f"[v][md]amix=inputs=2:duration=first:normalize=0,"
-              f"apad=whole_dur={dur:.3f},loudnorm=I=-14:TP=-1.0:LRA=9[a]")
+              f"loudnorm=I=-14:TP=-1.0:LRA=9[a]")
         cmd = ["ffmpeg", "-v", "error", "-y", "-i", out, "-i", voice, "-i", music,
                "-filter_complex", fc, "-map", "0:v", "-map", "[a]"]
     else:
